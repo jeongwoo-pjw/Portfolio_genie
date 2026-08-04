@@ -92,16 +92,15 @@
   justify-content: flex-start;
   /* Both the gap and the vertical padding shrunk from --sp-6/--sp-8 - at the icon's
      old 108px size that breathing room read fine, but against the now-326px icon it
-     added up to a lot of empty space above/below, inflating the whole card. Top and
-     bottom padding kept equal (--sp-2, 8px each) per a later request - an earlier
-     pass left top smaller than bottom, which read as no padding under the text
-     at all next to the (much larger, 234px) icon above it. */
+     added up to a lot of empty space above/below, inflating the whole card. Bottom
+     padding explicitly set to 20px per a later request (doesn't match any --sp token,
+     so it's a literal value rather than var(--sp-N)) - top/sides unchanged. */
   gap: var(--sp-3);
   background: #fff;
   border: 1px solid var(--hairline);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--sp-2) var(--sp-3);
+  padding: var(--sp-2) var(--sp-3) 20px;
   color: var(--text-dim);
   font-size: var(--fs-body);
   font-weight: 600;
