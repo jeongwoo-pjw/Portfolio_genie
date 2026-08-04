@@ -41,6 +41,12 @@ Vite 버전(`../app`)에서 Next.js(App Router)로 마이그레이션하며 진�
 - Project Flow(Timeline) 카드 순서가 실제 페이지 섹션 순서(AS-IS → Persona → Journey)와 어긋나 있던 것을 수정하고, TO-BE 카드 설명을 실제 구현된 5개 화면 기준으로 갱신.
 - FloatingDock의 "Journey" 항목이 Persona 섹션으로 이동하도록 앵커 변경.
 
+## 2026-08-04 — Vercel 배포 트러블슈팅
+
+- 최초 배포 시도에서 빌드가 "Running TypeScript ..." 단계 직후 조용히 죽고 Vercel이 이를 "No entrypoint found"라는 무관한 에러로 표시 — 원인은 R3F/drei/postprocessing/gsap/recharts 등 타입이 무거운 의존성으로 인한 빌드 컨테이너 OOM. `next.config.ts`에 `typescript: { ignoreBuildErrors: true }` 추가로 빌드 중 타입체크를 생략하도록 해결(로컬 `npx tsc --noEmit`은 에러 없음을 별도 확인).
+- Vercel 프로젝트가 실제로는 `jeongwoo-pjw/Portfolio_genie`가 아닌 별도의 private 저장소(`portfolio_genie_app-next`)에 연결되어 있어 커밋이 전혀 반영되지 않던 문제 발견 — Settings → Git에서 올바른 저장소로 재연결.
+- Vercel의 "Redeploy"는 그 배포가 생성될 때의 커밋/저장소 참조를 그대로 재사용하므로, 저장소를 새로 연결한 뒤에는 Redeploy가 아니라 새 커밋 푸시로 새 배포를 트리거해야 함.
+
 ## 알려진 이슈 / 다음 작업 후보
 
 - `../app`(구버전 Vite 앱)은 아직 저장소에 함께 존재 — Next.js 버전으로 완전히 대체되면 정리 필요.
