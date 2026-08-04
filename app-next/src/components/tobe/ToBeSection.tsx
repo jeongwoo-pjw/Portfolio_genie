@@ -93,6 +93,18 @@ export function ToBeSection() {
       if (refreshed) return;
       refreshed = true;
       ScrollTrigger.refresh();
+      // ScrollTrigger.refresh() resyncs every registered trigger's start/end against
+      // the current DOM, and as a side effect re-fires each one's onEnter/onLeave
+      // (even triggers nowhere near their boundary) - this one's own onLeave call
+      // among them unconditionally calls resumeSnap(), which spuriously re-enables
+      // mandatory snap even if the scroll position is still legitimately inside this
+      // trigger's paused range (e.g. deep in #closing, past the point this refresh
+      // itself was waiting to be safe to run at). Re-asserting from `isActive` - which
+      // reflects the trigger's real state against the now-refreshed measurements,
+      // not just the last callback that happened to fire during the resync - corrects
+      // that rather than leaving snap incorrectly resumed.
+      if (trigger.isActive) pauseSnap();
+      else resumeSnap();
     };
     const onOneDone = () => {
       remaining -= 1;
