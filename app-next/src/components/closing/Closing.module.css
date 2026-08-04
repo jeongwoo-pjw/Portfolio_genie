@@ -1,0 +1,35 @@
+.section {
+  padding: calc(var(--section-pad) * 1.3) 0 calc(var(--sp-24) + 60px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(45% 45% at 50% 40%, rgba(0, 150, 255, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.wordmark {
+  font-size: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-6);
+}
+
+.line {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-dim);
+  font-size: var(--fs-body-lg);
+  line-height: 1.7;
+}
+
+.foot {
+  margin-top: var(--sp-24);
+  color: var(--text-mute);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+}

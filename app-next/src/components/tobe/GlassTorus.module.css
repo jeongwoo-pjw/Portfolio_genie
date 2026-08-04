@@ -1,0 +1,21 @@
+/* top/bottom bleed past the section's exact edges (instead of inset:0) - .conceptSection
+   is sized with min-height:100dvh, and `dvh` can shift by a few pixels mid-scroll as
+   the browser's own UI chrome shows/hides, which briefly desyncs the canvas's last
+   measured size from the section's actual height and exposes a thin seam at the
+   boundary. A small overscan means that jitter lands inside the bled area instead of
+   at a visible edge. */
+.wrap {
+  position: absolute;
+  top: -2%;
+  bottom: -2%;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

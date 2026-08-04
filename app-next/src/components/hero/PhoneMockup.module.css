@@ -1,0 +1,16 @@
+.wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.frameImg {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 30px 60px rgba(16, 19, 26, 0.28));
+}

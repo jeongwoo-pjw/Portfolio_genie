@@ -1,0 +1,86 @@
+.section {
+  padding: var(--section-pad-top) 0 var(--section-pad);
+}
+
+.hint {
+  color: var(--text-mute);
+  font-size: var(--fs-small);
+  margin-top: var(--sp-2);
+}
+
+.viewport {
+  overflow: hidden;
+  padding: var(--sp-2) clamp(20px, 5vw, 48px) var(--sp-8);
+}
+
+.track {
+  display: flex;
+  gap: var(--sp-6);
+  width: max-content;
+}
+
+.card {
+  flex: 0 0 min(78vw, 340px);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gradient-blue);
+  flex-shrink: 0;
+}
+
+.indexNum {
+  font-size: var(--fs-h3);
+  font-weight: 800;
+  color: var(--text-mute);
+}
+
+.eyebrowLabel {
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+}
+
+.card h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin: var(--sp-1) 0 var(--sp-2);
+}
+
+.desc {
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.link {
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--blue-dark);
+  text-decoration: none;
+  margin-top: var(--sp-2);
+}
+
+.link:hover {
+  text-decoration: underline;
+}

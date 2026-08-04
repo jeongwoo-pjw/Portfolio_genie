@@ -1,0 +1,281 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  /* no local background - the animated gradient canvas (<SceneBackground>, boosted
+     contrast for this section) shows straight through, unmuted by an extra overlay */
+}
+
+/* ---- inner layout: full-bleed hero, content vertically centered / bottom row pinned to the bottom edge ---- */
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100svh;
+  padding: var(--sp-16) clamp(20px, 5vw, 48px) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.content {
+  /* phone width derived from its height (capped by both svh and vw so it scales with the
+     viewport in both dimensions) and the mockup's intrinsic aspect ratio, so the text columns
+     can be pinned an exact 40px-at-1920 gap past the background circle's edge */
+  --phone-h: min(60svh, 34vw);
+  --phone-ar: 0.4908;
+  --phone-w: calc(var(--phone-h) * var(--phone-ar));
+  /* circle is 168% of phone width (0.8x of the previous 210%), so it reaches 0.34x of
+     phone-w past the phone's own edge (0.84 radius - 0.5 half-width); edge-gap doubled
+     to 32px-at-1920 so the text sits noticeably further from the smaller circle */
+  --edge-gap: clamp(32px, 4.1666vw, 96px);
+  --circle-gap: calc(var(--edge-gap) + var(--phone-w) * 0.34);
+  /* wordmark line sizes (each 4px smaller across the whole fluid range than before) */
+  --wm-primary: clamp(5.25rem, 1.75rem + 7.5vw, 12.75rem);
+  --wm-secondary: clamp(4.25rem, 1.35rem + 6.5vw, 10.75rem);
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr var(--phone-w) 1fr;
+  align-items: center;
+  align-content: center;
+  gap: 0;
+}
+
+/* ---- left: subcopy + meta stats, flush with the hero's own left padding, vertically
+   centered like the phone/copy column. metaTop and metaRow get extra breathing room
+   (2.5x the normal gap) between them. ---- */
+.metaCol {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--sp-6) * 2.5);
+  align-items: flex-start;
+}
+
+.metaTop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.metaRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  margin: 0;
+}
+
+/* divider sits as a pseudo-element exactly centered in the (equal, gap-driven) space
+   between items, so the gap to the divider is identical regardless of how wide each
+   item's own content happens to be. */
+.metaItem {
+  position: relative;
+  max-width: 130px;
+}
+
+.metaItem:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--sp-8) / -2);
+  width: 1px;
+  background: var(--hairline);
+}
+
+.metaItem dt {
+  font-size: clamp(0.6rem, 0.58rem + 0.1vw, 0.68rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: var(--sp-2);
+}
+
+.metaItem dd {
+  margin: 0;
+  font-size: clamp(0.72rem, 0.68rem + 0.15vw, 0.82rem);
+  color: var(--text-dim);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ---- center: phone, sized to 60% of the hero viewport height (capped by width too) ---- */
+.phoneCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--phone-h);
+  min-height: 320px;
+}
+
+/* ---- right: main copy, pinned past the circle edge, vertically centered like the phone ---- */
+.copyCol {
+  position: relative;
+  min-width: 0;
+  padding-left: var(--circle-gap);
+}
+
+.eyebrow {
+  margin-bottom: 2px;
+}
+
+.wordmark {
+  /* Pretendard's latin 'g' renders with a clipped-looking flat descender at this
+     weight/size, so the brand wordmark uses a dedicated display font instead */
+  font-family: 'Archivo Black', 'Pretendard Variable', sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: var(--sp-4);
+  overflow: visible;
+  padding: 0.15em 0.05em;
+}
+
+.wordmarkPrimary {
+  font-size: var(--wm-primary);
+}
+
+.wordmarkSecondary {
+  font-size: var(--wm-secondary);
+}
+
+/* Reuses the exact material/lighting/color recipe of the UX Concept & Solution
+   section's twisted-knot glass shape (GlassTorus.tsx: StudioEnvironment +
+   blue/purple/pink directionalLight rig lighting a near-white glass knot,
+   overrides={{ color: '#e9edf1' }}) directly on the wordmark itself, translated into
+   CSS since the text stays real DOM (not a WebGL mesh): the gradient fill is that same
+   knot color shot through with the same blue/purple/pink light colors, and a stepped
+   text-shadow stack (one shadow per "layer", each a touch darker/bluer and offset one
+   more pixel down) stands in for the knot's own extruded glass depth - a solid-color
+   fill would read flat, but this staircase reads as a beveled 3D glass surface catching
+   light from the same three directions as the real knot. */
+/* A bright near-white band (45-55%) sits in the middle of the gradient stops, and
+   background-size/animation stretches+slides that whole gradient back and forth across
+   the glyphs - the bright band sweeps through like light catching a turning glass
+   surface, on top of the static beveled-glass look above. */
+.wordmarkGradient {
+  background: linear-gradient(
+    100deg,
+    #e9edf1 0%,
+    #3f9dff 22%,
+    #ffffff 45%,
+    #ffffff 55%,
+    #9a6dff 68%,
+    #ff6fd8 85%,
+    #e9edf1 100%
+  );
+  background-size: 250% 250%;
+  animation: wordmarkShine 6s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  text-shadow:
+    0 1px 0 #e9edf1,
+    0 2px 0 #dfe6ee,
+    0 3px 0 #cfe3ff,
+    0 4px 0 #b9d8ff,
+    0 6px 12px rgba(63, 157, 255, 0.35),
+    0 10px 24px rgba(154, 109, 255, 0.25);
+  backdrop-filter: blur(6px) saturate(1.4);
+  -webkit-backdrop-filter: blur(6px) saturate(1.4);
+}
+
+@keyframes wordmarkShine {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.subcopy {
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+  color: var(--text-dim);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.description {
+  width: fit-content;
+  max-width: calc(100% - var(--circle-gap));
+  font-size: var(--fs-body);
+  font-weight: 400;
+  color: var(--text-mute);
+  line-height: 1.6;
+}
+
+/* ---- bottom row: tool icons (left) / signature (right) ---- */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.signature {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+    text-align: center;
+  }
+
+  .metaCol {
+    order: 2;
+    align-items: center;
+    gap: var(--sp-6);
+  }
+
+  .metaRow {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-4) 0;
+  }
+
+  .metaItem {
+    text-align: center;
+  }
+
+  .metaItem::before {
+    display: none;
+  }
+
+  .description {
+    max-width: none;
+  }
+
+  .phoneCol {
+    order: 1;
+    height: 46svh;
+  }
+
+  .copyCol {
+    order: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .subcopy {
+    white-space: normal;
+  }
+
+  .bottomRow {
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+}

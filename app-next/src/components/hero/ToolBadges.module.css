@@ -1,0 +1,17 @@
+.toolsRow {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: 0 6px 16px rgba(16, 19, 26, 0.18);
+}

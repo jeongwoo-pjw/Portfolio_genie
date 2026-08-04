@@ -1,0 +1,279 @@
+.section {
+  padding: var(--section-pad-top) 0 var(--section-pad);
+}
+
+/* ---- stage: the two UX-position cards cross-fade via GSAP as the user scrolls through a
+   pinned range (see TrendAnalysis.tsx), same pattern as MarketResearch's stage. Falls back
+   to plain stacked flow for prefers-reduced-motion (.stageStatic, toggled in JS). ---- */
+.stage {
+  position: relative;
+  min-height: 560px;
+}
+
+.stageLayer {
+  width: 100%;
+}
+
+.card.stageLayer {
+  position: absolute;
+  inset: 0;
+}
+
+.stage2.stageLayer {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.stageStatic {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.stageStatic .stageLayer,
+.stageStatic .stage2.stageLayer {
+  position: static;
+  opacity: 1;
+  visibility: visible;
+}
+
+.card {
+  padding: var(--sp-8) var(--sp-6);
+}
+
+.card h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-bottom: var(--sp-6);
+  text-align: left;
+}
+
+.experienceGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+  align-items: stretch;
+}
+
+.positionImg {
+  display: block;
+  width: calc(100% - var(--sp-6) * 8);
+  height: auto;
+  margin: var(--sp-6) auto var(--sp-8);
+}
+
+.positionImgSide {
+  display: block;
+  width: 80%;
+  height: auto;
+  margin: var(--sp-6) auto var(--sp-8);
+}
+
+/* justify-content:space-between previously spread these out to fill the row stretched
+   to match the (now taller) image column, blowing out the intended sp-4 rhythm between
+   leadBox/traitRows into huge gaps - center the fixed-gap group instead so the gap stays
+   exactly sp-4 regardless of how much extra height stretch gives this column. */
+.traitList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-4);
+  max-width: 85%;
+}
+
+.leadBox {
+  padding: var(--sp-4) var(--sp-6);
+  margin-bottom: var(--sp-2);
+  border-radius: var(--r-md);
+  background: rgba(0, 150, 255, 0.08);
+  border: 1px solid rgba(0, 150, 255, 0.22);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.traitRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+/* :first-of-type (not :first-child) so this still matches the first .traitRow even
+   though .leadBox - a <p>, a different tag - now precedes it as the true first child. */
+.traitRow:first-of-type {
+  border-top: none;
+}
+
+.traitIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.traitTitle {
+  font-size: calc(var(--fs-small) + 2px);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: var(--sp-1);
+}
+
+.traitDesc {
+  font-size: calc(var(--fs-micro) + 2px);
+  color: var(--text-mute);
+  line-height: 1.5;
+}
+
+.subjectRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  width: calc(100% - var(--sp-6) * 8);
+  margin: 0 auto var(--sp-8);
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--r-pill);
+  background: linear-gradient(120deg, rgba(0, 150, 255, 0.14), rgba(179, 136, 255, 0.12));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-card);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--text-mute);
+}
+
+.subjectCenter {
+  font-weight: 500;
+  color: var(--text-mute);
+}
+
+.subjectEmphasis {
+  color: var(--blue-light);
+  font-weight: 700;
+}
+
+.subjectArrows {
+  display: inline-block;
+  color: var(--blue-light);
+  letter-spacing: -1px;
+  font-size: calc(var(--fs-body) + 6px);
+}
+
+.subjectArrowsLeft {
+  animation: arrowNudgeLeft 1.4s ease-in-out infinite;
+}
+
+.subjectArrowsRight {
+  animation: arrowNudgeRight 1.4s ease-in-out infinite;
+}
+
+@keyframes arrowNudgeLeft {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(-6px);
+    opacity: 1;
+  }
+}
+
+@keyframes arrowNudgeRight {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+}
+
+.tagCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  width: calc(100% - var(--sp-6) * 8);
+  margin: 0 auto var(--sp-8);
+}
+
+.tagColWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+.tagColWrap.end {
+  align-items: flex-end;
+}
+
+.tagCol {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.tagCol.end {
+  justify-content: flex-end;
+}
+
+.tagPill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: transparent;
+  border: 1.5px solid var(--blue-light);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tagDescBox {
+  width: calc(100% - 80px);
+  padding: var(--sp-4) var(--sp-6);
+  border-radius: var(--r-md);
+  background: rgba(0, 150, 255, 0.04);
+  border: 1px solid rgba(0, 150, 255, 0.12);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: left;
+}
+
+.tagColWrap.end .tagDescBox {
+  text-align: right;
+}
+
+@media (max-width: 860px) {
+  .experienceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tagCols {
+    grid-template-columns: 1fr;
+  }
+
+  .tagColWrap.end {
+    align-items: flex-start;
+  }
+
+  .tagCol.end {
+    justify-content: flex-start;
+  }
+
+  .tagColWrap.end .tagDescBox {
+    text-align: left;
+  }
+}

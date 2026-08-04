@@ -1,0 +1,318 @@
+.section {
+  padding: var(--section-pad-top) 0 var(--section-pad);
+  background: linear-gradient(180deg, transparent, rgba(0, 150, 255, 0.04) 40%, transparent);
+}
+
+.heading {
+  margin-bottom: var(--sp-6);
+  max-width: 640px;
+}
+
+.heading h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  margin: var(--sp-3) 0 var(--sp-3);
+}
+
+.heading p:not(:global(.eyebrow)) {
+  color: var(--text-dim);
+  font-size: var(--fs-body);
+}
+
+/* ---- stage: chartGrid and the usage-reason card occupy the same grid cell, cross-fading
+   via GSAP as the user scrolls through a pinned range (see MarketResearch.tsx). Stacking
+   both layers on the same grid-area (rather than position:absolute+inset:0) lets the grid
+   container auto-size to the taller layer, so content can never overflow past the box.
+   Falls back to plain stacked flow for prefers-reduced-motion (.stageStatic, toggled in JS). ---- */
+.stage {
+  position: relative;
+  display: grid;
+  margin-bottom: 32px;
+}
+
+.stageLayer {
+  width: 100%;
+  grid-area: 1 / 1;
+}
+
+.chartGrid.stageLayer {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--sp-6);
+  align-content: start;
+}
+
+.usageCard.stageLayer {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.stageStatic .stageLayer {
+  grid-area: auto;
+  margin-bottom: var(--sp-8);
+}
+
+.stageStatic .usageCard {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card {
+  position: relative;
+  --card-pad-y: calc(var(--sp-12) - 26px);
+  padding: var(--card-pad-y) var(--sp-6);
+}
+
+/* Adds 20px of box height without touching padding or real content - an empty in-flow
+   block participates in .card's auto height (and .cardFlex's column) the same as a real
+   child would, so it grows the box uniformly for both the flex (TOP3) and plain (competitor)
+   card variants. */
+.card::after {
+  content: '';
+  display: block;
+  height: 20px;
+}
+
+.card h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-bottom: var(--sp-4);
+}
+
+.card .sub {
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  margin-bottom: calc(var(--sp-12) + 6px);
+}
+
+.subRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: calc(var(--sp-12) + 6px);
+}
+
+.subRow .sub {
+  margin-bottom: 0;
+}
+
+.unit {
+  color: var(--text-mute);
+  font-size: var(--fs-small);
+  white-space: nowrap;
+}
+
+.chartSpacer {
+  width: 100%;
+}
+
+.cardFlex {
+  display: flex;
+  flex-direction: column;
+}
+
+.chartSpacerCenter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.citation {
+  position: absolute;
+  right: var(--sp-6);
+  bottom: var(--sp-3);
+  text-align: right;
+  color: var(--text-mute);
+  font-size: var(--fs-micro);
+}
+
+/* Reads .card's own --card-pad-y instead of a hardcoded value, so the citation always
+   rests exactly at the card's bottom padding edge even if that padding is retuned. */
+.card .citation {
+  bottom: var(--card-pad-y);
+}
+
+/* rankBarsWrap is the shared grid: label column sizes to its widest row (max-content)
+   so labels sit flush with zero dead space on the left, matching the track's flush
+   right edge - a fixed pixel column left uneven slack on whichever side had shorter
+   text, reading as "shifted right" inside the card. Each .rankRow subgrids into those
+   same two tracks so bars stay pixel-aligned across rows while remaining its own box
+   (needed for the GSAP x/opacity reveal animation, which display:contents would break). */
+.rankBarsWrap {
+  width: 100%;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--sp-3);
+}
+
+.rankRow {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: center;
+}
+
+.rankLabel {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.rankLabel.genie {
+  color: var(--blue-light);
+  font-weight: 700;
+}
+
+.rankTrack {
+  height: 25px;
+  border-radius: var(--r-pill);
+  background: rgba(16, 19, 26, 0.05);
+  overflow: hidden;
+}
+
+.rankFill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: rgba(16, 19, 26, 0.2);
+}
+
+.rankFill.genie {
+  background: var(--gradient-blue);
+}
+
+.rankFill.dim {
+  background: rgba(16, 19, 26, 0.08);
+}
+
+.usageCard {
+  position: relative;
+  /* extra bottom padding reserves room for the absolutely-positioned .citation - it
+     doesn't participate in normal flow, so the auto-height box never budgets space for
+     it on its own and content can end up sitting right under (or behind) it. */
+  padding: var(--sp-6) var(--sp-6) calc(var(--sp-6) + 16px);
+}
+
+.usageCard h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-bottom: var(--sp-4);
+}
+
+.usageCard .sub {
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  margin-bottom: calc(var(--sp-12) + 6px);
+}
+
+.usageBody {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-4);
+}
+
+.chartBox {
+  flex: 2;
+  min-width: 0;
+  background: rgba(0, 150, 255, 0.08);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-6);
+}
+
+/* Right margin on the BarChart itself (not a CSS transform on this wrapper) is what
+   actually reserves room for the value labels past each bar's end - a transform just
+   repaints the already-clipped SVG shifted over, it can't recover pixels the SVG never
+   drew past its own (clipping) viewBox edge. The wider right margin also naturally
+   pulls the bars/labels further left, which was the original ask. */
+.usageChart {
+  width: 100%;
+  height: 320px;
+}
+
+.callout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  padding: calc(var(--sp-3) + 10px) var(--sp-6);
+  border-radius: var(--r-md);
+  background: #fff;
+  border: 1px solid rgba(0, 150, 255, 0.22);
+}
+
+.calloutImg {
+  width: 192px;
+  height: 192px;
+  object-fit: contain;
+  margin-bottom: var(--sp-1);
+}
+
+.calloutLabel {
+  font-size: var(--fs-small);
+  color: var(--text-dim);
+  margin-bottom: var(--sp-1);
+}
+
+.calloutRank {
+  color: var(--blue-light);
+  font-weight: 800;
+}
+
+.calloutRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.calloutNum {
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  color: var(--blue-light);
+  white-space: nowrap;
+}
+
+.calloutReason {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--text);
+}
+
+@media (max-width: 860px) {
+  .chartGrid.stageLayer {
+    grid-template-columns: 1fr;
+    grid-area: auto;
+  }
+
+  .usageCard.stageLayer {
+    grid-area: auto;
+    opacity: 1;
+    visibility: visible;
+    margin-top: var(--sp-8);
+  }
+
+  .stage {
+    margin-bottom: 64px;
+  }
+
+  .usageBody {
+    flex-direction: column;
+  }
+
+  .usageChart {
+    height: 220px;
+  }
+
+  .subRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-1);
+  }
+}

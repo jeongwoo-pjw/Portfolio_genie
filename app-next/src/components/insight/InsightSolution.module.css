@@ -1,0 +1,184 @@
+/* Soft multi-color mesh (blue/purple/pink, brand family) behind the glass steps below -
+   without it the translucent/blurred boxes had nothing but flat white to sit on, which is
+   why they read as flat rather than glassy. */
+.section {
+  padding: var(--section-pad-top) 0 var(--section-pad);
+  background:
+    radial-gradient(ellipse 820px 520px at 12% 8%, rgba(0, 150, 255, 0.1), transparent 60%),
+    radial-gradient(ellipse 720px 520px at 88% 28%, rgba(179, 136, 255, 0.09), transparent 60%),
+    radial-gradient(ellipse 680px 460px at 45% 95%, rgba(255, 111, 216, 0.07), transparent 60%);
+}
+
+.headBlock {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--sp-8);
+}
+
+.flowWrap {
+  position: relative;
+}
+
+/* Insight -> Service Features -> Solution form one 3-step glassmorphism progression:
+   translucent, blurred panels over the section's gradient mesh, deepening in tint/blur
+   from step to step (see .featureGroup, .solutionGroup below) - insight and features
+   intentionally share this exact glass treatment. */
+.banner {
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  border-radius: var(--r-lg);
+  /* Blue stop raised 0.14 -> 0.4 (and the white stop pulled back to match) so this
+     first step reads as clearly blue-tinted at a glance, instead of nearly white with
+     just a faint wash - color now emphasized rather than merely implied. Border
+     removed entirely per a later request (was plain white, then blue-tinted to match -
+     the tinted background alone now carries the edge, no stroke). */
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(0, 150, 255, 0.4));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+}
+
+.stepArrow {
+  display: flex;
+  justify-content: center;
+  color: var(--blue-dark);
+  margin-bottom: var(--sp-6);
+  animation: insightArrowBob 1.8s ease-in-out infinite;
+}
+
+/* Both 0/100% and 50% shifted up 3px from their original translateY(0)/translateY(5px)
+   (the whole bob raised, same 5px amplitude preserved) per a later request to move
+   both arrows up 3px. */
+@keyframes insightArrowBob {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepArrow {
+    animation: none;
+    transform: translateY(-3px);
+  }
+}
+
+.banner p {
+  font-size: var(--fs-body-lg);
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text);
+}
+
+.groupLabel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  padding: 8px 22px;
+  border-radius: var(--r-pill);
+  background: #d6ecff;
+  border: 1px solid rgba(0, 150, 255, 0.35);
+  color: var(--blue-dark);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-card);
+  white-space: nowrap;
+}
+
+/* Flat solid (the darker of .solutionGroup's own two gradient stops - box-shadow below
+   already used that same rgba(0, 45, 90, ...) value) instead of a gradient, so the pill
+   reads as one deliberate color rather than a blend. */
+.solutionLabel {
+  background: #002d5a;
+  border: none;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(0, 45, 90, 0.32);
+}
+
+.featureGroup {
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  border-radius: var(--r-lg);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.42), rgba(0, 150, 255, 0.2));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.solutionGroup {
+  position: relative;
+  z-index: 1;
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--r-lg);
+  background: linear-gradient(160deg, rgba(0, 40, 90, 0.68), rgba(120, 80, 190, 0.38));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-card);
+}
+
+.boxRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  text-align: center;
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.featureBox {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(0, 150, 255, 0.12);
+}
+
+/* Darker/colored glass (not the usual white-frost tint) so white text still has enough
+   contrast against .solutionGroup's already-colorful blue/purple mesh backdrop. */
+.solutionBox {
+  background: rgba(0, 40, 80, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 860px) {
+  .banner p {
+    font-size: var(--fs-body);
+  }
+
+  .boxRow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,70 @@
+/* overflow left at its default (visible), not hidden: .albumSlot's side albums are
+   meant to spill past this box's own edges (see that rule below), so nothing here can
+   clip them. */
+.phoneBox {
+  position: relative;
+  width: 273px;
+  height: 561px;
+  border: 1px dashed var(--text-mute);
+  border-radius: 21px;
+  flex-shrink: 0;
+}
+
+/* 90% of the box's own width, pinned to the top 1/5 (not filling the box) - aspect-ratio
+   matches tobe-related-layout.png's own card template exactly (3618:5842) so the image
+   isn't stretched. */
+.cardSlot {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  width: 90%;
+  aspect-ratio: 3618 / 5842;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.cardBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity 0.6s ease;
+}
+
+/* A zero-size anchor point at the card template's own vertical center - .albumImg
+   children position themselves off of this via transform, not off .phoneBox, so
+   "centered in the card" stays correct if the card's own size/position above changes. */
+.albumSlot {
+  position: absolute;
+  /* 12px above the card template's own vertical center (55.4% -> 53.28%). */
+  top: 53.28%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.albumImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Overrides globals.css's `img { max-width: 100% }` reset - .albumSlot (this image's
+     containing block) is a 0-size anchor point, so that 100% resolved to 0 and was
+     silently capping the inline width below to 0 too, which was the actual bug behind
+     "album images don't show up, only the card template does". */
+  max-width: none;
+  object-fit: contain;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease,
+    width 0.6s ease,
+    height 0.6s ease;
+}
+
+@media (max-width: 860px) {
+  .phoneBox {
+    width: 220px;
+    height: 452px;
+    margin: 0 auto;
+  }
+}

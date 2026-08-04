@@ -1,0 +1,86 @@
+:root {
+  color-scheme: light;
+
+  /* ---- surface (white -> soft blue gradient mood) ---- */
+  --bg: #ffffff;
+  --bg-elevated: #f3f8ff;
+  --bg-elevated-2: #e8f1ff;
+  --bg-gradient: linear-gradient(180deg, #ffffff 0%, #f5f9ff 38%, #e9f2ff 100%);
+  --glass-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.58));
+  --glass-border: rgba(16, 20, 30, 0.08);
+  --hairline: rgba(16, 20, 30, 0.1);
+
+  /* ---- brand ---- */
+  --blue: #0096ff;
+  --blue-light: #33a9ff;
+  --blue-dark: #007acc;
+  --purple: #b388ff;
+  --pink: #ff6fd8;
+  --green: #14c8a0;
+  --green-light: #4fe0bf;
+  --gradient-brand: linear-gradient(120deg, var(--blue) 0%, var(--purple) 65%, var(--pink) 100%);
+  --gradient-blue: linear-gradient(120deg, var(--blue-dark), var(--blue-light));
+  --gradient-sphere: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+
+  /* ---- text ---- */
+  --text: #10131a;
+  --text-dim: rgba(16, 19, 26, 0.66);
+  --text-mute: rgba(16, 19, 26, 0.44);
+
+  /* ---- semantic (chart series, all blue-family per brand) ---- */
+  --series-genie: #0096ff;
+  --series-a: rgba(16, 19, 26, 0.16);
+  --series-b: rgba(16, 19, 26, 0.28);
+  --series-accent: #b388ff;
+
+  /* ---- type scale (fluid) ---- */
+  --fs-display: clamp(2.75rem, 3rem + 4vw, 6rem);
+  --fs-h1: clamp(2rem, 1.6rem + 2.2vw, 3.5rem);
+  --fs-h2: clamp(1.5rem, 1.3rem + 1.2vw, 2.375rem);
+  --fs-h3: clamp(1.15rem, 1.05rem + 0.6vw, 1.5rem);
+  --fs-body-lg: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.75rem;
+
+  /* ---- spacing ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-24: 96px;
+  --sp-32: 128px;
+  --section-pad: clamp(80px, 8vw + 40px, 160px);
+  --section-pad-top: clamp(58px, 2.5vw + 42px, 90px);
+
+  /* ---- radius ---- */
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-pill: 999px;
+
+  /* ---- shadow / glow ---- */
+  --shadow-card: 0 8px 32px rgba(16, 20, 30, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --glow-blue: 0 0 120px rgba(0, 150, 255, 0.18);
+  --glow-purple: 0 0 120px rgba(179, 136, 255, 0.16);
+  --glow-pink: 0 0 120px rgba(255, 111, 216, 0.14);
+
+  /* ---- motion ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.2s;
+  --dur-base: 0.6s;
+  --dur-slow: 0.9s;
+
+  --max-w: 1180px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --section-pad: 64px;
+    --section-pad-top: 58px;
+  }
+}

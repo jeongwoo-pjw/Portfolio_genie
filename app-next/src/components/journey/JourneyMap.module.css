@@ -1,0 +1,170 @@
+.section {
+  padding: var(--section-pad-top) 0 var(--section-pad);
+}
+
+.heading {
+  margin-bottom: var(--sp-12);
+}
+
+.map {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-8) var(--sp-6) var(--sp-6);
+  overflow-x: auto;
+}
+
+.map > * {
+  min-width: 920px;
+}
+
+/* ---- stage pills ---- */
+.stagePills {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 2px;
+  margin-bottom: var(--sp-6);
+}
+
+.stagePill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: #fff;
+}
+
+.stagePill.pre {
+  background: #171922;
+}
+.stagePill.during {
+  background: linear-gradient(120deg, #171922, #3a3f52);
+}
+.stagePill.post {
+  background: var(--gradient-blue);
+}
+
+/* ---- touchpoint axis + emotion curve, as the uploaded UJM image ---- */
+.journeyImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+  margin-bottom: var(--sp-6);
+}
+
+/* ---- pain point / opportunity rows ---- */
+.groupRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+/* 4 slots (3 pain-point groups + 1 experience group) instead of the old 10-column
+   layout tied to the source UJM's touchpoint columns - the experience cell is half as
+   wide as it used to be (20% of the row instead of 40%), with that freed-up width
+   redistributed evenly across the 3 pain-point cells (4fr each vs. the experience
+   cell's 3fr). Both rows share this so Opportunity's cells line up under their
+   Pain/Experience counterpart above. */
+.groupCells {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr 3fr;
+  gap: var(--sp-3);
+  /* Cells size to their own content instead of stretching to match the row's tallest
+     cell (the grid default) - both rows share this class, so it applies to Pain point
+     and Opportunity alike. See the first-child exception below for Pain point's own
+     first box, which is the one deliberate opt-back-in to matching its row siblings. */
+  align-items: start;
+}
+
+.rowLabel {
+  flex-shrink: 0;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-pill);
+  background: #171922;
+  color: #fff;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  /* Flips the vertical text to read bottom-to-top instead of top-to-bottom (the
+     default vertical-rl direction), so it reads correctly with your head tilted the
+     other way. */
+  transform: rotate(180deg);
+  padding: var(--sp-3) 0;
+}
+
+/* Grid item wrapper: plain pass-through for every group, but for the experience group
+   it stacks the external .miniLabel above .groupCell as two separate blocks - the
+   label is no longer inside the box's own padding at all, so the box doesn't need to
+   reserve room for it. */
+.groupCellWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pain point's own first box (col1) is the one deliberate exception to .groupCells'
+   align-items:start above: it opts back into stretching to match its row siblings'
+   height, regardless of its own (shorter, 2-item) content/padding. .groupCell itself
+   needs flex:1 too, or the wrapper stretching wouldn't actually grow the visible box. */
+.groupCellWrap:first-child {
+  align-self: stretch;
+}
+
+.groupCellWrap:first-child .groupCell {
+  flex: 1;
+}
+
+.groupCell {
+  grid-row: span 1;
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  border-radius: var(--r-md);
+  background: rgba(16, 19, 26, 0.03);
+}
+
+.groupCell.experienceCell {
+  background: rgba(16, 19, 26, 0.07);
+}
+
+/* Same filled-pill visual language as .rowLabel (dark fill, white text), just a small
+   horizontal badge instead of a full-height vertical one - sits above .groupCell as
+   its own element (see .groupCellWrap) rather than inside the box's padding. */
+.miniLabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: var(--sp-2);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: #171922;
+  color: #fff;
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.groupCell.opportunityCell {
+  background: rgba(0, 150, 255, 0.05);
+}
+
+.groupList {
+  margin: 0;
+  padding-left: 16px;
+  font-size: var(--fs-micro);
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.groupCell.opportunityCell .groupList li {
+  color: var(--blue-dark);
+  font-weight: 600;
+}

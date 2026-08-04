@@ -1,0 +1,772 @@
+/* min-height keeps this section's own content (heading + cards + differentiation box)
+   filling the full viewport when Lenis Snap aligns to its top - without it, on shorter
+   content/taller viewports the #tobe section's next block started inside the same frame,
+   which read as the snap "not working" (two sections visible/scrollable at once instead
+   of a clean stop at #ux-concept). */
+.conceptSection {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--section-pad-top) 0 var(--section-pad);
+  text-align: center;
+}
+
+.conceptSection > :global(.container) {
+  position: relative;
+  z-index: 1;
+}
+
+.conceptHeading {
+  max-width: 620px;
+  margin: 0 auto var(--sp-16);
+}
+
+.conceptHeading h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  margin-top: var(--sp-3);
+}
+
+.conceptCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+  text-align: left;
+}
+
+.conceptCard {
+  padding: var(--sp-8);
+}
+
+.conceptCardHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+
+.conceptIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 8px rgba(16, 19, 26, 0.08);
+  border-radius: var(--r-sm);
+  padding: 6px;
+  object-fit: contain;
+}
+
+.conceptCardHead h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+.conceptCard p {
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  line-height: 1.75;
+}
+
+.differentiationBox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-top: var(--sp-6);
+  padding: var(--sp-8);
+  text-align: left;
+}
+
+.differentiationIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 8px rgba(16, 19, 26, 0.08);
+  border-radius: var(--r-sm);
+  padding: 6px;
+  object-fit: contain;
+}
+
+.differentiationBox h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin-bottom: var(--sp-2);
+}
+
+.differentiationBox p {
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  line-height: 1.75;
+}
+
+/* ---- compare blocks ---- */
+.section {
+  padding: var(--sp-16) 0;
+  /* .layoutImage (연관추천 레이아웃 추가) is deliberately wider than its grid column
+     and overflows past the container's right edge to stay at full size - this stops
+     that bleed from ever widening the page's own scrollable area into a horizontal
+     scrollbar. */
+  overflow-x: hidden;
+  /* Standard gap between each "screen" block in this section (differentiation, entry,
+     layout, and the remaining BLOCKS.map items) - 2x the site's normal --sp-24
+     inter-block spacing, per an explicit request to widen and standardize the gap
+     between TO-BE screens specifically. Referenced by each block's own margin-bottom
+     below rather than duplicated as a literal value. */
+  --tobe-gap: calc(var(--sp-24) * 2);
+}
+
+/* ---- differentiation intro (eyebrow + HOME chip + two-line copy + big group shot) ---- */
+.diffHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-8);
+}
+
+.homeChip {
+  display: inline-block;
+  /* .diffHeading's flex gap already gives var(--sp-3) above this chip - the extra
+     margin-top brings the eyebrow-to-chip gap to 5x that (var(--sp-3) * 5 total)
+     without touching the chip-to-copy gap below it. */
+  margin-top: calc(var(--sp-3) * 4);
+  padding: 6px 20px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(120deg, var(--blue), var(--blue-light));
+  color: #fff;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(0, 150, 255, 0.28);
+}
+
+.diffCopy {
+  /* .diffHeading's flex gap already gives 12px above this - the extra 8px margin
+     brings the chip-to-copy gap to 20px total. */
+  margin-top: 8px;
+  /* var(--fs-h2) (clamp(1.5rem, 1.3rem + 1.2vw, 2.375rem)) shifted down 4px (0.25rem)
+     at every stop instead of just the one currently-rendered size, so it stays 4px
+     smaller than h2 across the whole fluid range, not just at one viewport width. */
+  font-size: clamp(1.25rem, 1.05rem + 1.2vw, 2.125rem);
+  font-weight: 700;
+  line-height: 1.35;
+  /* Prevents CJK's default any-character line-breaking from splitting a word like
+     "이미지" mid-syllable when a <br />-ed line still doesn't quite fit its column. */
+  word-break: keep-all;
+}
+
+.diffGroupImageWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--sp-12);
+}
+
+/* Sized identically to .diffGroupImage's own max-width so this box's pixel bounds
+   exactly match the rendered image - the callout labels below are positioned as % of
+   *this* element, which only lines up with the leader-line dots baked into the image
+   if this box is the image's own box, not the (wider, center-justified) flex wrap
+   around it. */
+.diffGroupImageInner {
+  position: relative;
+  width: 100%;
+  max-width: 972px;
+}
+
+.diffGroupImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-lg);
+}
+
+/* One per leader-line dot baked into tobe-differentiation-group.png - top/left are set
+   inline as % of .diffGroupImageInner (see DIFFERENTIATION_CALLOUTS), so they track the
+   dots at any render width. Plain running text (no pill/background) matching the AS-IS
+   section's own main description line (.pointList li in AsIsProblems.module.css:
+   color var(--text), line-height 1.75) instead of a small dark badge, now that each one
+   is a full sentence rather than a short label - font-size stepped down one size from
+   that AS-IS line (--fs-body-lg -> --fs-body) since these run narrower (220px) and read
+   better a touch smaller. */
+.diffCallout {
+  position: absolute;
+  transform: translateY(-50%);
+  width: 220px;
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  /* Default CJK line-breaking treats every Hangul syllable as a break opportunity, so
+     at 220px a word like "애트모스" can split mid-word (e.g. "애트" / "모스") - keep-all
+     restricts breaks to actual word (어절) boundaries instead. break-word is only a
+     fallback for the rare single word wider than the box, so it still doesn't reintroduce
+     mid-word breaks in the normal case. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  pointer-events: none;
+}
+
+/* Left-side dots: the leader line runs from the label (out in the margin) rightward to
+   the dot, so the label's right edge anchors at the dot and the text grows leftward. */
+.diffCalloutLeft {
+  transform: translate(-100%, -50%);
+  margin-left: -14px;
+  text-align: right;
+}
+
+/* Right-side dot: mirror of the above - label grows rightward from the dot. */
+.diffCalloutRight {
+  margin-left: 14px;
+}
+
+@media (max-width: 860px) {
+  .diffCallout {
+    display: none;
+  }
+}
+
+/* Shared positioning context for .entryLayoutConnector, which draws a dashed line from
+   image 2 (entry screen) down to the phone image (layout screen) across the gap
+   between the two blocks below. */
+.entryLayoutConnectorWrap {
+  position: relative;
+}
+
+/* Fixed pixel width/height (not width:100% + viewBox scaling) is deliberate: entry
+   screen's image 2 sits at a fixed pixel position that doesn't move with container
+   width (.entryStage/.entryImg2Wrap are all fixed px, not fluid), so a scaling SVG
+   would drift out of alignment with it at any width other than the one it was
+   calibrated for. A fixed-size SVG keeps the same 1:1 pixel mapping .entryImg2's own
+   position uses.
+   Point A (521.5, 934.26) = image 2's bottom-center: .entryStage is 300px wide,
+   .entryImg2Wrap sits at left: 300+32(gap)=332, is 379px wide, so its center-x is
+   332+379/2=521.5; its top is 20% of .entryStage's 615.61px height (123.12) and its
+   own height at 379px wide is 811.14, so bottom-y = 123.12+811.14=934.26.
+   Point B (1131, 1142.61) = the layout screen's *phone's* own width-center (not the
+   whole image, which is a much wider composition with preview cards to the phone's
+   left) at its top edge: tobe-related-layout.png's phone bezel sits at x 69.6-99.9% of
+   that image's own canvas, so its center is 84.75% across; at .layoutImage's 900px
+   rendered width that's 762.75px in from the image's own left edge. That left edge is
+   an estimate (.layoutCopyCol's grid track is fluid, 240-340px) using ~320px column +
+   48px gap = 368, so x = 368+762.75=1130.75 - may drift a little at container widths
+   far from ~1084px, acceptable for a decorative connector, not a precise pointer. y is
+   .entryBlockWrap's own height (615.61) + its margin-bottom (319+144=463
+   gap-plus-reserve) + .layoutImageCol's margin-top (64) = 1142.61 (the phone starts
+   almost exactly at its image's own top edge, negligible margin measured there).
+   Hidden on mobile (see media query below) since the entry block's own fixed-px layout
+   doesn't survive that breakpoint's stacked fallback either. */
+.entryLayoutConnector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  /* Negative, not 0: positioned descendants with z-index:auto/0 actually paint ABOVE
+     normal-flow siblings (like .entryBlockWrap/.layoutBlockWrap) in stacking order, so
+     z-index:0 would draw this line over the phone images instead of behind them. */
+  z-index: -1;
+}
+
+@media (max-width: 860px) {
+  .entryLayoutConnector {
+    display: none;
+  }
+}
+
+/* ---- 연관추천 진입 경로 개선: staggered image pair + copy (not the standard
+   before/after compareGrid used by the other blocks below) ---- */
+.entryBlockWrap {
+  /* .entryStage's own box height only covers image 1 (see below) - image 2 and the
+     copy block are absolutely positioned and extend past it, so 319px reserves that
+     extra room rather than letting the next block overlap them (img1 h=615.61 @300px,
+     img2 top=123.12 (20% of that), img2 h=811.14 @379px -> img2 bottom=934.26, minus
+     img1's own 615.61 = ~319px). --tobe-gap is added on top of that reserve, not
+     instead of it, so the *visible* gap after this block still matches every other
+     block's. */
+  margin-bottom: calc(319px + var(--tobe-gap));
+}
+
+/* Width fixed (matches the AS-IS phone frames' own 300px convention) rather than
+   fluid - aspect-ratio matches tobe-related-entry-1.png exactly, so this box's
+   height *is* image 1's own rendered height, which is what lets .entryImg2Wrap and
+   .entryCopyHead/.entryCopyDesc's `top` percentages mean "N% down image 1" via plain
+   CSS percentages instead of JS measurement. */
+.entryStage {
+  position: relative;
+  width: 300px;
+  aspect-ratio: 5384 / 11048;
+}
+
+.entryImg1 {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-lg);
+}
+
+/* left: 100% lands right at .entryStage's own right edge (=image 1's right edge,
+   same width) - the gap pushes it further out from there.
+   Width is 379px, NOT the same 300px as image 1: the two source images' phones are
+   nearly identical in absolute pixel width (5354px vs 5351px) but sit in
+   differently-proportioned canvases (image 1's phone fills 99.4% of its own canvas
+   width; image 2's, needing room for its baked-in leader line, only fills 78.8%) - at
+   equal *canvas* widths image 2's actual phone would render visibly smaller. 379px is
+   300 * (5354/5384) / (5351/6790), i.e. the width that makes the two *phones* (not
+   canvases) come out the same rendered size. */
+.entryImg2Wrap {
+  position: absolute;
+  top: 20%;
+  left: calc(100% + var(--sp-8));
+  width: 379px;
+  aspect-ratio: 6790 / 14528;
+}
+
+.entryImg2 {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-lg);
+}
+
+/* Centered on the *phone*, not the canvas: tobe-related-entry-2.png's phone bezel
+   only spans x=17..5367 of its own 6790px-wide canvas (room reserved on the right for
+   the baked-in leader line to the dot), so the phone's own visual center sits at
+   39.65% of the image width, not 50% - left:50% was centering on the canvas and
+   reading as skewed right relative to the phone. Vertically at 1/5 (20%) of image 2's
+   own height. */
+.entrySwipeHint {
+  position: absolute;
+  top: 20%;
+  left: 39.65%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  /* SwipeUpChevron's stroke="currentColor" reads this - same blue as .entryChip's
+     background (var(--blue), the gradient's leading color). */
+  color: var(--blue);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.entrySwipeHint svg {
+  opacity: 0;
+  animation: entrySwipeUp 1.6s ease-in-out infinite;
+}
+
+.entrySwipeHint svg:last-child {
+  animation-delay: 0.3s;
+}
+
+@keyframes entrySwipeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  35% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+
+/* Same top as .entryImg2Wrap ("동일한 높이") - left starts past image 1 + image 2 +
+   both gaps (image 2's width here must match .entryImg2Wrap's own 379px). */
+.entryCopyHead {
+  position: absolute;
+  top: 20%;
+  left: calc(100% + 379px + var(--sp-8) * 2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Same visual form as .homeChip (differentiation screen's "HOME" pill) - a separate
+   class rather than reusing .homeChip directly because that one's margin-top is
+   specifically tuned to sit under a preceding eyebrow line, which doesn't exist here.
+   margin-bottom: 20px matches .homeChip's own chip-to-copy gap exactly (that one's
+   flex gap 12px + .diffCopy's margin-top 8px = 20px total). */
+.entryChip {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 6px 20px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(120deg, var(--blue), var(--blue-light));
+  color: #fff;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(0, 150, 255, 0.28);
+}
+
+/* Exact same font system as .diffCopy ("지니뮤직에서만 제공하는 차별화 된 기능을
+   손쉽게") - same clamp, weight, and line-height, so the two main-copy headings in
+   this section read as one consistent type style. white-space: nowrap keeps it on one
+   line instead of wrapping inside its 320px-ish column. */
+.entryCopyHeading {
+  font-size: clamp(1.25rem, 1.05rem + 1.2vw, 2.125rem);
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+/* Positioned independently of .entryCopyHead, aligned instead with the dashed
+   leader-line dot baked into tobe-related-entry-2.png (measured at 29.1% down that
+   image's own height) rather than with image 1 - top = image 2's own top offset
+   (20% of image 1's height = 123.12px) + 29.1% of image 2's rendered height
+   (811.14px @379px wide = 236.04px), giving 359.16px total, expressed as a % of
+   .entryStage's own height (615.61px) so it still tracks correctly if that width
+   ever changes. translateY(-50%) centers the text block ON that point instead of
+   starting its top edge there - same positioning system as .diffCallout. Font also
+   matches .diffCallout exactly (color/size/line-height/word-break) rather than the
+   differentiation screen's other, larger body copy. */
+.entryCopyDesc {
+  position: absolute;
+  top: 58.34%;
+  left: calc(100% + 379px + var(--sp-8) * 2);
+  transform: translateY(-50%);
+  width: 320px;
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 860px) {
+  .entryBlockWrap {
+    margin-bottom: var(--sp-16);
+  }
+
+  .entryStage {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .entryImg2Wrap,
+  .entryCopyHead,
+  .entryCopyDesc {
+    position: static;
+    width: 100%;
+    max-width: 300px;
+    margin: var(--sp-6) auto 0;
+  }
+
+  .entryCopyHead {
+    align-items: center;
+  }
+
+  .entryCopyHeading {
+    white-space: normal;
+  }
+
+  .entryCopyHead,
+  .entryCopyDesc {
+    text-align: center;
+  }
+}
+
+/* ---- 연관추천 레이아웃 추가: copy on the left, one image pinned to the right
+   (mirror of the entry block's image-left/copy-right arrangement). .layoutBlockWrap
+   itself stays a normal child of .container (no viewport-width tricks - the row's own
+   box model is untouched), but .layoutImage keeps its full enlarged 1000px size and
+   simply overflows past the 1fr column's (and often the container's) right edge -
+   .section's overflow-x: hidden keeps that bleed from ever creating a horizontal
+   scrollbar on the page. */
+.layoutBlockWrap {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  align-items: start;
+  gap: var(--sp-12);
+  margin-bottom: var(--tobe-gap);
+}
+
+.layoutCopyCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.layoutCopyDesc {
+  margin-top: var(--sp-3);
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* justify-content: flex-start (not flex-end): the image is wider than this column, so
+   whichever side it's anchored to is the side that DOESN'T overflow - flex-start keeps
+   its left edge at the column's own left edge and lets the overflow spill rightward,
+   off the right edge of the container/page, instead of leftward into the copy column. */
+.layoutImageCol {
+  display: flex;
+  justify-content: flex-start;
+  /* Lowered further than the chip's own top - more clearance than a small nudge, now
+     that the image is at its full enlarged size again. */
+  margin-top: var(--sp-16);
+}
+
+/* Sized identically to .layoutImage's own width so this box's pixel bounds exactly
+   match the rendered image - .layoutCallout below is positioned as % of *this*
+   element, which only lines up with the leader-line dot baked into the image if this
+   box is the image's own box. */
+.layoutImageInner {
+  position: relative;
+  width: 900px;
+}
+
+/* 900px = the previous 1000px reduced to 90%. tobe-related-layout.png's phone bezel is
+   only 30.3% of its own canvas width (5354px cards-included canvas), so even at 900px
+   the phone itself still comes out around 273px - close to the ~298px (entry screen's
+   image 1) / ~310px (differentiation screen) phone size used elsewhere in this
+   section. */
+.layoutImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* tobe-related-layout.png's latest revision bakes in an actual enlarged callout of the
+   share/save button row (dashed outline, measured at x 2.35-29.8%, y 80.29-94.55% of
+   the image's own box) below the leader-line dot - this sits immediately to the right
+   of that box (left: 32%, a small gap past its 29.8% right edge). top: 87.82% is the
+   "담기" (save) button's own fill color, not the dashed outline around both buttons
+   (which sits ~18px above it) - that's the specific edge this should share a top line
+   with, measured directly by scanning down a pixel column through that button until
+   its navy fill starts. Stays clear of the phone, which starts at 69.6%. Same
+   plain-text system as .diffCallout/.entryCopyDesc. */
+.layoutCallout {
+  position: absolute;
+  width: 300px;
+  text-align: left;
+  color: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 860px) {
+  .layoutBlockWrap {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .layoutCopyCol {
+    align-items: center;
+  }
+
+  .layoutImageCol {
+    justify-content: center;
+    margin-top: var(--sp-6);
+  }
+
+  .layoutImageInner {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  /* Dropped at this breakpoint same as .diffCallout - a %-positioned label tied to a
+     specific dot in the image doesn't translate to the stacked mobile layout below. */
+  .layoutCallout {
+    display: none;
+  }
+}
+
+/* Last block in #tobe - copy on the left (no chip, unlike the other screens above),
+   SwipeAlbumCarousel's own dashed phone box on the right. Reuses .diffCopy's own type
+   system for the heading and .layoutCopyDesc's for the description. */
+/* Box/carousel column first (left), copy column second (right) - both the grid
+   template and the JSX child order were swapped together in ToBeSection.tsx. */
+.finalBlockWrap {
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 400px);
+  /* start, not center: the phone box's own top should land on the same line as the
+     copy column's first line (the h3), not centered against the whole (taller) box. */
+  align-items: start;
+  margin-bottom: var(--tobe-gap);
+  /* column-gap wider than the site's usual var(--sp-12): SwipeAlbumCarousel's right
+     neighbor album sits up to 148px past the phone box's own right edge (not clipped,
+     by design - see that component's own OFFSET_X comment), so the ordinary 48px gap
+     let it drift into the copy column. 160px clears that plus a bit of breathing room.
+     row-gap (mobile stack) stays normal. */
+  column-gap: 160px;
+  row-gap: var(--sp-8);
+}
+
+.finalCopyCol {
+  max-width: 480px;
+}
+
+.finalImageCol {
+  display: flex;
+  justify-content: flex-start;
+  /* Mirrors the 148px of side-album overflow already reserved on the right (via
+     .finalBlockWrap's column-gap, see its own comment) - without a matching reserve
+     here, the LEFT side album spills straight past this block's left edge and out
+     into the container's own left padding, past the flush-left edge every other
+     TO-BE screen's content (.entryStage, .layoutCopyCol, .playlistImages, ...)
+     starts at - reading as misaligned against the rest of the section. */
+  padding-left: 148px;
+}
+
+/* ---- 재생목록 편집 방식 개선: chip + copy + description, then 3 step screenshots
+   connected by dashed lines below (not beside the text, unlike the other screens) ---- */
+/* No max-width here (unlike the other copy blocks): .playlistImages below needs the
+   container's full ~1084px to fit all 3 images at their now-enlarged size. */
+.playlistBlockWrap {
+  max-width: none;
+}
+
+.playlistBlockWrap .layoutCopyDesc {
+  max-width: 560px;
+}
+
+.playlistImages {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: var(--sp-8);
+}
+
+/* 300px matches the ~298px phone size used in the "listening" (entry) screen's own
+   image 1. Images 2/3's own phone graphic is 4824px wide inside a 5144px canvas, so
+   300px displayed width puts their *phone* right at that target. */
+.playlistImage {
+  position: relative;
+  /* Above .playlistConnectorBg, which deliberately runs behind image 1's own left
+     half - see that rule's own comment. */
+  z-index: 1;
+  display: block;
+  width: 300px;
+  height: auto;
+  border-radius: var(--r-lg);
+  flex-shrink: 0;
+}
+
+/* Re-measured directly (sampling the exported PNG's own alpha channel at several row
+   heights via canvas getImageData, not a color-threshold guess) after image 1 was
+   reuploaded: its phone graphic is pixel-for-pixel the same 4824px width as images
+   2/3's, just sitting in a wider 5520px canvas (vs. their 5144px) - same underlying
+   asset, more padding around it. 322px (300 * 5520/5144) scales image 1 up by exactly
+   that canvas-width ratio so its *phone*, not its canvas, ends up the same rendered
+   size as images 2/3's. */
+.playlistImage1 {
+  width: 322px;
+}
+
+/* Same gradient/color/opacity as .entryLayoutConnector's SVG line (violet -> pink,
+   #c6b3ff/#ffb8e8 at 0.9 opacity) and the same 2px thickness - a border can't take a
+   gradient directly, so the dash pattern is cut out of a solid gradient fill via
+   mask-image instead of border-style: dashed. */
+.playlistConnector {
+  flex: 1;
+  min-width: 20px;
+  height: 2px;
+  background: linear-gradient(to right, #c6b3ff, #ffb8e8);
+  opacity: 0.9;
+  -webkit-mask-image: repeating-linear-gradient(to right, #000 0 7px, transparent 7px 14px);
+  mask-image: repeating-linear-gradient(to right, #000 0 7px, transparent 7px 14px);
+  /* The gradient's own #c6b3ff (violet) end is close in value to the section's ambient
+     lavender background, so without this the dashes nearest image1 all but disappear
+     into it and the line reads as if it "starts" partway in, at the pinker end - a
+     glow independent of the mask keeps every dash visible regardless of what's behind
+     it, matching how the SVG connector's solid stroke already reads. */
+  filter: drop-shadow(0 0 1px rgba(123, 92, 219, 0.55));
+}
+
+/* Extends the dashed line backward from where .playlistConnector (the visible one in
+   the gap) starts, so the line's own left starting point reads as image 1's own
+   horizontal center rather than its right edge - sits BEHIND image 1 (z-index below
+   it, see .playlistImage) since it runs directly under that image's right half; only
+   shows through where the image itself is transparent/padded. 161px = half of
+   .playlistImage1's 322px width (image 1's own center); width 161px reaches exactly to
+   image 1's right edge, i.e. precisely where the in-flow .playlistConnector picks up,
+   so the two form one continuous dash pattern with no seam. Same gradient/mask/glow as
+   .playlistConnector, just positioned absolutely instead of living in the flex flow. */
+.playlistConnectorBg {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 161px;
+  width: 161px;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, #c6b3ff, #ffb8e8);
+  opacity: 0.9;
+  -webkit-mask-image: repeating-linear-gradient(to right, #000 0 7px, transparent 7px 14px);
+  mask-image: repeating-linear-gradient(to right, #000 0 7px, transparent 7px 14px);
+  filter: drop-shadow(0 0 1px rgba(123, 92, 219, 0.55));
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .finalBlockWrap {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .finalCopyCol {
+    max-width: none;
+    margin: 0 auto;
+  }
+
+  .finalImageCol {
+    justify-content: center;
+    margin-top: var(--sp-8);
+  }
+
+  .playlistBlockWrap {
+    text-align: center;
+  }
+
+  .playlistBlockWrap .layoutCopyDesc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .playlistImages {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .playlistImage {
+    width: 130px;
+  }
+
+  .playlistImage1 {
+    width: 140px;
+  }
+
+  .playlistConnector {
+    flex: 0 0 16px;
+  }
+
+  .playlistConnectorBg {
+    left: 70px;
+    width: 70px;
+  }
+
+  .conceptCards {
+    grid-template-columns: 1fr;
+  }
+  .differentiationBox {
+    flex-direction: column;
+    text-align: center;
+  }
+}
