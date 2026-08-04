@@ -3,7 +3,7 @@
 import { useId, useLayoutEffect, useRef } from 'react';
 import { Reveal } from '../ui/Reveal';
 import { ScrollTrigger, prefersReducedMotion } from '../../lib/gsap';
-import { pauseSnap, resumeSnap } from '../../lib/scrollSnap';
+import { addEndSnap, pauseSnap, resumeSnap } from '../../lib/scrollSnap';
 import { GlassTorus } from './GlassTorus';
 import { SwipeAlbumCarousel } from './SwipeAlbumCarousel';
 import styles from './ToBeSection.module.css';
@@ -105,6 +105,13 @@ export function ToBeSection() {
       // that rather than leaving snap incorrectly resumed.
       if (trigger.isActive) pauseSnap();
       else resumeSnap();
+      // Defense in depth: with #tobe/#closing both excluded from normal snap
+      // registration, #ux-concept is the last *registered* point anywhere below them -
+      // if the pause state above is ever wrong for any reason, mandatory snap has
+      // nothing nearer to resolve to and jumps all the way back up there. Registering
+      // the page's own true end (measured now, after every #tobe image has finished
+      // growing the page) gives it somewhere harmless and nearby to land instead.
+      addEndSnap(document.documentElement.scrollHeight - window.innerHeight);
     };
     const onOneDone = () => {
       remaining -= 1;
