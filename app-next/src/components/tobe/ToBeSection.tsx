@@ -37,12 +37,19 @@ export function ToBeSection() {
   useLayoutEffect(() => {
     const uxConcept = uxConceptRef.current;
     const tobe = tobeRef.current;
-    if (!uxConcept || !tobe || prefersReducedMotion()) return;
+    // #closing (Closing.tsx) has no ref of its own here - it's a separate component -
+    // but it's always the very next section right after #tobe, so it's looked up by id
+    // rather than threading a ref across files just for this.
+    const closing = document.getElementById('closing');
+    if (!uxConcept || !tobe || !closing || prefersReducedMotion()) return;
 
-    // #tobe opts out of Lenis's "mandatory" snap (see SmoothScroll.tsx) because it's a
-    // long-form section, but mandatory snap still resolves every gesture to the
-    // nearest *registered* section - since #tobe isn't registered, scrolling into it
-    // was getting yanked straight back to #ux-concept above on every gesture.
+    // #tobe and #closing both opt out of Lenis's "mandatory" snap (see SmoothScroll.tsx)
+    // - #tobe because it's long-form content, #closing because snap resuming right at
+    // the #tobe/#closing seam was pulling the view onto #closing before the Playlist
+    // block (#tobe's last content, at that same seam) had been seen. Mandatory snap
+    // still resolves every gesture to the nearest *registered* section - since neither
+    // is registered, scrolling through them was getting yanked back to #ux-concept
+    // (the last *registered* section before them) on every gesture.
     // Snap is paused starting 2/3 of the way down #ux-concept itself (not at the exact
     // boundary between the two sections) so #tobe can start coming into view naturally
     // well before #ux-concept has fully scrolled past, instead of #ux-concept staying
@@ -51,15 +58,19 @@ export function ToBeSection() {
     // to fire right at its bottom edge has zero lead time and can lose the race against
     // Lenis's own mandatory-snap evaluation of that same scroll tick, bouncing back up.
     // Starting at 66% leaves plenty of room.
-    // One continuous trigger (start on #ux-concept, endTrigger on #tobe) rather than
-    // two separate ones is deliberate: with two independent triggers, #ux-concept's own
-    // onLeave would call resumeSnap() the moment it fully scrolls out - re-enabling
-    // mandatory snap partway through #tobe's still-long remaining scroll and
-    // reintroducing the exact bug this is fixing.
+    // One continuous trigger spanning #ux-concept through #closing's own end - not two
+    // (or three) independent ones - is deliberate: with separate triggers, whichever one
+    // covers #tobe on its own would call resumeSnap() the moment #tobe's bottom scrolls
+    // past, which happens *before* a separate #closing trigger's own start point has
+    // fully taken over, briefly re-enabling mandatory snap right at that seam - with
+    // nothing registered between #ux-concept and the end of the page, that seam-gap
+    // was exactly what let a gesture there resolve mandatory snap all the way back up
+    // to #ux-concept. A single trigger covering the whole #ux-concept-to-#closing span
+    // has only one onLeave, which only fires once #closing (the true end) is behind you.
     const trigger = ScrollTrigger.create({
       trigger: uxConcept,
       start: '66% top',
-      endTrigger: tobe,
+      endTrigger: closing,
       end: 'bottom bottom',
       onEnter: () => pauseSnap(),
       onEnterBack: () => pauseSnap(),

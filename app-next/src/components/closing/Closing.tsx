@@ -1,43 +1,9 @@
-'use client';
-
-import { useLayoutEffect, useRef } from 'react';
 import { Reveal } from '../ui/Reveal';
-import { ScrollTrigger, prefersReducedMotion } from '../../lib/gsap';
-import { pauseSnap, resumeSnap } from '../../lib/scrollSnap';
 import styles from './Closing.module.css';
 
 export function Closing() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section || prefersReducedMotion()) return;
-
-    // #closing is excluded from mandatory snap (see SmoothScroll.tsx's NO_SNAP_IDS) so
-    // it doesn't yank the view onto itself before the Playlist block at the end of
-    // #tobe (right at that same seam) has actually been seen - but exclusion alone
-    // wasn't enough: once inside #closing, with nothing registered ahead of it,
-    // mandatory snap was instead resolving backward to #ux-concept, the nearest
-    // *registered* point behind it, yanking the view all the way back up. Same
-    // pauseSnap/resumeSnap pattern as #asis/#tobe fixes that by suppressing snap
-    // entirely for as long as #closing is in view, in either direction - starting at
-    // 'top bottom' (as early as #closing begins entering from below) closes the same
-    // early window the #asis fix needed.
-    const trigger = ScrollTrigger.create({
-      trigger: section,
-      start: 'top bottom',
-      end: 'bottom bottom',
-      onEnter: () => pauseSnap(),
-      onEnterBack: () => pauseSnap(),
-      onLeave: () => resumeSnap(),
-      onLeaveBack: () => resumeSnap(),
-    });
-
-    return () => trigger.kill();
-  }, []);
-
   return (
-    <section className={styles.section} id="closing" ref={sectionRef}>
+    <section className={styles.section} id="closing">
       <div className={styles.glow} aria-hidden="true" />
       <div className="container">
         <Reveal>

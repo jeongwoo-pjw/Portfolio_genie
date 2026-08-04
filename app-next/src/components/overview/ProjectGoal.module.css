@@ -93,14 +93,14 @@
   /* Both the gap and the vertical padding shrunk from --sp-6/--sp-8 - at the icon's
      old 108px size that breathing room read fine, but against the now-326px icon it
      added up to a lot of empty space above/below, inflating the whole card. Bottom
-     padding explicitly set to 20px per a later request (doesn't match any --sp token,
-     so it's a literal value rather than var(--sp-N)) - top/sides unchanged. */
+     padding widened to 52px per a later request (doesn't match any --sp token, so
+     it's a literal value rather than var(--sp-N)) - top/sides unchanged. */
   gap: var(--sp-3);
   background: #fff;
   border: 1px solid var(--hairline);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--sp-2) var(--sp-3) 20px;
+  padding: var(--sp-2) var(--sp-3) 52px;
   color: var(--text-dim);
   font-size: var(--fs-body);
   font-weight: 600;
@@ -117,13 +117,13 @@
   justify-content: center;
 }
 
-/* 234px = 293px (previously scaled to 90% of the original 326px) scaled to 80% again
-   per a later size-down request. object-fit: contain keeps each illustration's own
-   outline fully visible rather than being cropped - these are irregular, non-square
+/* 187px = 234px (previously 293px scaled to 80%, itself 326px scaled to 90%) scaled to
+   80% again per a later size-down request. object-fit: contain keeps each illustration's
+   own outline fully visible rather than being cropped - these are irregular, non-square
    icon illustrations, unlike the old inline SVGs. */
 .solutionIconImg {
-  width: 234px;
-  height: 234px;
+  width: 187px;
+  height: 187px;
   object-fit: contain;
 }
 
