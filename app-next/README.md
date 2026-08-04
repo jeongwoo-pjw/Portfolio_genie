@@ -54,9 +54,16 @@ public/images/            # 케이스 스터디에 쓰이는 UI 목업 스크린
 - Lenis의 mandatory snap은 `#`이 붙은 특정 섹션에만 적용되며, `Timeline`(Project Flow)과 `Persona`처럼 GSAP로 핀 고정된 섹션은 진입/이탈 시 `pauseSnap()` / `resumeSnap()`(`src/lib/scrollSnap.ts`)으로 스냅을 일시 중지·재개합니다.
 - `TO-BE` 섹션은 용량이 큰 이미지가 많아 로드가 끝나기 전 `ScrollTrigger`가 짧은 높이로 먼저 측정되는 문제가 있었습니다 — 섹션 내 모든 `<img>`의 로드가 끝난 뒤 `ScrollTrigger.refresh()`를 다시 호출해 해결했습니다(`ToBeSection.tsx`).
 
-## 배포
+## 배포 (Vercel)
 
-Vercel 배포를 기준으로 작성되었습니다(`next build` 표준 산출물).
+이 저장소는 루트에 구버전 Vite 앱(`app/`)과 이 Next.js 앱(`app-next/`)이 함께 있는 모노레포 형태이므로, Vercel 프로젝트 생성 시 **Root Directory를 `app-next`로 지정**해야 합니다.
+
+1. [vercel.com](https://vercel.com) 에서 GitHub 계정으로 로그인 → "Add New... → Project" → `jeongwoo-pjw/Portfolio_genie` 저장소 Import.
+2. "Configure Project" 화면에서 **Root Directory**를 `app-next`로 변경 (기본값인 저장소 루트가 아님 — 반드시 지정해야 함).
+3. Framework Preset은 Next.js가 자동 감지됩니다. Build Command/Output Directory는 기본값(`next build`) 그대로 두면 됩니다.
+4. Deploy 클릭 — 이후 `main` 브랜치에 푸시할 때마다 자동 재배포됩니다.
+
+로컬에서는 `npm run build`로 프로덕션 빌드가 정상적으로 완료되는 것까지 확인된 상태입니다.
 
 ---
 
