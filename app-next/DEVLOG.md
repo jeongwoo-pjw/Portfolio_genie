@@ -58,6 +58,18 @@ Vite 버전(`../app`)에서 Next.js(App Router)로 마이그레이션하며 진�
 - AS-IS 섹션 아이폰 애니메이션 목업(`PhoneCarousel`) 크기 300px → 270px(90%).
 - TO-BE 섹션 스와이프 앨범 캐러셀: 앨범 슬라이드를 카드 템플릿 기준 20px 추가로 위로 이동, `.finalBlockWrap`을 `align-items: start` → `center`로 바꿔 우측 카피 칼럼이 좌측 폰 박스(561px)의 세로 중앙에 오도록 조정.
 
+## 2026-08-04 — Closing 섹션 역방향 스냅 버그 최종 해결 + 마무리 UI 조정
+
+배포 사이트에서 재현된 "페이지 맨 아래에서 UX Concept & Solution으로 튕겨 올라가는" 버그를 세 단계에 걸쳐 추적:
+
+1. **1차 시도(실패)**: `#closing`에 `#asis`와 동일한 패턴으로 별도 `pauseSnap`/`resumeSnap` 트리거를 추가 — 하지만 이 자체가 `#tobe` 트리거의 `onLeave`(→ `resumeSnap`)가 `#tobe`/`#closing` 경계에서 `#closing`의 별도 트리거보다 먼저 발동해버리는 새로운 레이스 컨디션을 만들었음(코드베이스에 이미 `#ux-concept`↔`#tobe` 경계에서 동일한 클래스의 버그를 막기 위해 "트리거 하나로 통합" 패턴이 주석으로 문서화돼 있었는데, 그 교훈을 놓침).
+2. **2차 시도(근본 원인 수정)**: `pauseSnap`/`resumeSnap`에 직접 `console.log`를 심어 라이브로 추적한 결과, `#tobe` 이미지 로드 후 호출되는 `ScrollTrigger.refresh()`가 등록된 모든 트리거의 onEnter/onLeave를 재동기화 과정에서 재발동시키고, 그 중 `#ux-concept`→`#closing` 트리거 자신의 onLeave가 무조건 `resumeSnap()`을 호출해 스냅을 스스로 재활성화하고 있음을 확인. `ToBeSection.tsx`의 트리거를 `endTrigger: tobe` → `endTrigger: closing`으로 확장해 `#ux-concept`부터 `#closing` 끝까지 하나의 연속된 트리거로 통합(`#closing`의 별도 트리거는 제거), refresh 직후 `trigger.isActive` 기준으로 pause 상태를 재확정하도록 보정.
+3. **3차 방어 조치**: 그래도 자동화 테스트로는 재현이 안 돼 확신이 부족했던 채로, `scrollSnap.ts`에 `addEndSnap()`을 추가해 페이지의 실제 끝 지점을 명시적 스냅 후보로 등록 — `#tobe`/`#closing` 밑으로는 `#ux-concept`가 유일한 등록 지점이라 어떤 pause 상태 버그가 있어도 항상 그리로 튈 수 있었던 구조적 위험을 없앰(최악의 경우도 "페이지 끝 근처로 보정"에 그침).
+
+사용자가 실제 배포에서 최종 확인 완료.
+
+그 외 마무리 조정: Goal 박스 하단 패딩 52px, 아이콘 187px(누적 90%×80%×80%); Insight 화살표 위치 추가 조정(-7px); AS-IS "메인페이지" 상세 이미지 2개 70% 축소.
+
 ## 알려진 이슈 / 다음 작업 후보
 
 - `../app`(구버전 Vite 앱)은 아직 저장소에 함께 존재 — Next.js 버전으로 완전히 대체되면 정리 필요.
