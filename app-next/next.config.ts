@@ -5,12 +5,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
-  // Vercel's build container OOM-killed the build during the "Running TypeScript"
-  // step (heavy type-checking load from R3F/drei/postprocessing/gsap/recharts) -
-  // the process died silently and Vercel surfaced it as a generic "No entrypoint
-  // found" error instead of an OOM message. `next build` still compiles/type-checks
-  // locally via `npm run build` and `tsc` before pushing; this only skips the
-  // in-build type-check that was crashing the CI container.
+  // Added while chasing a Vercel deploy failure that (once downgraded off Next.js
+  // 16 - see DEVLOG.md) turned out to be an @vercel/next builder incompatibility,
+  // not a type error. Left in as a safety net against the heavy type-checking load
+  // from R3F/drei/postprocessing/gsap/recharts; `npx tsc --noEmit` is run locally
+  // before pushing to catch real type errors instead.
   typescript: {
     ignoreBuildErrors: true,
   },

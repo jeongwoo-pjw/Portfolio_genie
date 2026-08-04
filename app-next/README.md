@@ -4,7 +4,7 @@
 
 ## Tech Stack
 
-- **Next.js 16** (App Router) + **React 19**, TypeScript
+- **Next.js 15** (App Router) + **React 19**, TypeScript — pinned to 15.x rather than 16 due to a Vercel builder incompatibility (see `AGENTS.md` / `DEVLOG.md`)
 - **CSS Modules** (Tailwind 미사용) — 컴포넌트별 `*.module.css`
 - **GSAP + ScrollTrigger** — 섹션 리빌, 핀 고정, 스크럽 애니메이션
 - **Lenis** (`lenis/snap`) — 관성 스무스 스크롤 + 섹션 단위 mandatory snap

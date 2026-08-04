@@ -46,6 +46,9 @@ Vite 버전(`../app`)에서 Next.js(App Router)로 마이그레이션하며 진�
 - 최초 배포 시도에서 빌드가 "Running TypeScript ..." 단계 직후 조용히 죽고 Vercel이 이를 "No entrypoint found"라는 무관한 에러로 표시 — 원인은 R3F/drei/postprocessing/gsap/recharts 등 타입이 무거운 의존성으로 인한 빌드 컨테이너 OOM. `next.config.ts`에 `typescript: { ignoreBuildErrors: true }` 추가로 빌드 중 타입체크를 생략하도록 해결(로컬 `npx tsc --noEmit`은 에러 없음을 별도 확인).
 - Vercel 프로젝트가 실제로는 `jeongwoo-pjw/Portfolio_genie`가 아닌 별도의 private 저장소(`portfolio_genie_app-next`)에 연결되어 있어 커밋이 전혀 반영되지 않던 문제 발견 — Settings → Git에서 올바른 저장소로 재연결.
 - Vercel의 "Redeploy"는 그 배포가 생성될 때의 커밋/저장소 참조를 그대로 재사용하므로, 저장소를 새로 연결한 뒤에는 Redeploy가 아니라 새 커밋 푸시로 새 배포를 트리거해야 함.
+- 저장소 연결과 Root Directory를 바로잡은 뒤에도 "No entrypoint found" 에러가 `next build` 완전 성공 *이후*에 계속 발생 — Vercel 커뮤니티에서 동일 증상 사례 확인, `@vercel/next` 빌더가 아직 Next.js 16.x를 지원하지 못하는 알려진 플랫폼 호환성 문제로 판명. Next.js를 16.2.10 → **15.5.22**(최신 안정 버전)로 다운그레이드해 해결.
+  - `eslint-config-next` 15.x는 `next/core-web-vitals`·`next/typescript`를 Flat Config 배열이 아닌 레거시 `.eslintrc` 형식으로만 제공(Flat Config 기본 지원은 Next 16부터) — `eslint.config.mjs`를 `@eslint/eslintrc`의 `FlatCompat`으로 감싸는 표준 패턴으로 교체.
+  - 다운그레이드 시 Next.js가 `tsconfig.json`의 `jsx`를 자동으로 `react-jsx` → `preserve`로 재작성(정상적인 15.x 요구사항).
 
 ## 알려진 이슈 / 다음 작업 후보
 
