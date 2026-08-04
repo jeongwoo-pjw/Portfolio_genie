@@ -50,6 +50,14 @@ Vite 버전(`../app`)에서 Next.js(App Router)로 마이그레이션하며 진�
   - `eslint-config-next` 15.x는 `next/core-web-vitals`·`next/typescript`를 Flat Config 배열이 아닌 레거시 `.eslintrc` 형식으로만 제공(Flat Config 기본 지원은 Next 16부터) — `eslint.config.mjs`를 `@eslint/eslintrc`의 `FlatCompat`으로 감싸는 표준 패턴으로 교체.
   - 다운그레이드 시 Next.js가 `tsconfig.json`의 `jsx`를 자동으로 `react-jsx` → `preserve`로 재작성(정상적인 15.x 요구사항).
 
+## 2026-08-04 — 배포 후 UI 미세조정 + 스크롤 스냅 버그 수정
+
+- Goal 섹션 Key Solution 아이콘 234px로 재축소(293px의 80%), 박스 패딩도 축소하되 텍스트 하단 패딩은 `--sp-2`로 유지해 실제로 보이는 여백 확보.
+- Insight & Solution 섹션: 배경 멀티컬러 메시가 앞뒤 섹션(TrendAnalysis는 배경 없음, AsIsProblems는 다른 색조의 옅은 워시)과 부딪혀 경계선이 뚜렷하게 보이던 문제 — 배경을 `.section::before`로 분리하고 `mask-image` 세로 페이드(상하 140px)를 적용해 경계를 부드럽게 처리.
+- 스크롤 스냅 버그 재현·수정: `#insight` 섹션의 콘텐츠 높이(896px)가 뷰포트 높이(911px)에 매우 근접한데, 바로 다음 `#asis`가 스냅 등록에서 제외돼 있어(`NO_SNAP_IDS`) 강한 스크롤 한 번에 `#insight`의 스냅 지점을 완전히 지나쳐 `#asis` 내부 깊숙이(2700px+) 착지하는 버그를 실제로 재현함. `#asis`는 이미 자체 `pauseSnap`/`resumeSnap` ScrollTrigger(`AsIsProblems.tsx`)로 "읽는 중 맨 위로 안 끌려감" 보호가 되어 있음을 확인하고, `SmoothScroll.tsx`의 `NO_SNAP_IDS`에서 `'asis'`를 제거(`'tobe'`만 남김) — `#asis` 자신의 시작점도 스냅 후보가 되어 오버슈트가 훨씬 가까운 지점에서 멈추도록 개선. 완벽한 정지점 스냅은 아니지만(약 200px 오차) 이전의 "섹션 전체를 건너뜀" 문제는 확실히 해소, 일반 강도 스크롤은 회귀 없이 정상 스냅.
+- AS-IS 섹션 아이폰 애니메이션 목업(`PhoneCarousel`) 크기 300px → 270px(90%).
+- TO-BE 섹션 스와이프 앨범 캐러셀: 앨범 슬라이드를 카드 템플릿 기준 20px 추가로 위로 이동, `.finalBlockWrap`을 `align-items: start` → `center`로 바꿔 우측 카피 칼럼이 좌측 폰 박스(561px)의 세로 중앙에 오도록 조정.
+
 ## 알려진 이슈 / 다음 작업 후보
 
 - `../app`(구버전 Vite 앱)은 아직 저장소에 함께 존재 — Next.js 버전으로 완전히 대체되면 정리 필요.

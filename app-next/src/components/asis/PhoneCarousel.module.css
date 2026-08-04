@@ -1,7 +1,8 @@
 .frame {
   position: relative;
   width: 100%;
-  max-width: 300px;
+  /* 270px = 300px scaled to 90% per a size-down request. */
+  max-width: 270px;
   margin: 0 auto;
   padding: 14px 10px;
   border-radius: 46px;

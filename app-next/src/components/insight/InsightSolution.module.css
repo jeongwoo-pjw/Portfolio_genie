@@ -1,12 +1,27 @@
 /* Soft multi-color mesh (blue/purple/pink, brand family) behind the glass steps below -
    without it the translucent/blurred boxes had nothing but flat white to sit on, which is
-   why they read as flat rather than glassy. */
+   why they read as flat rather than glassy. Lives on ::before (not .section's own
+   background) so a mask-image can fade it out at the very top/bottom without also
+   masking the section's actual content - neighboring sections (TrendAnalysis above has
+   no background at all, AsIsProblems below has a much fainter, different-hued wash) don't
+   share this mesh, so without the fade this section's own top/bottom edges read as a
+   hard, unnatural seam against flat white / the other tint. */
 .section {
+  position: relative;
   padding: var(--section-pad-top) 0 var(--section-pad);
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background:
     radial-gradient(ellipse 820px 520px at 12% 8%, rgba(0, 150, 255, 0.1), transparent 60%),
     radial-gradient(ellipse 720px 520px at 88% 28%, rgba(179, 136, 255, 0.09), transparent 60%),
     radial-gradient(ellipse 680px 460px at 45% 95%, rgba(255, 111, 216, 0.07), transparent 60%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 140px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 140px), transparent 100%);
 }
 
 .headBlock {

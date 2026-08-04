@@ -38,9 +38,16 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       duration: 0.9,
       debounce: 1300,
     });
-    // #asis (Analysis) and #tobe both opt out of snap: their content is long-form and
-    // reading through it shouldn't get yanked back to the section top mid-scroll.
-    const NO_SNAP_IDS = new Set(['asis', 'tobe']);
+    // #tobe opts out of snap: its content is long-form and reading through it shouldn't
+    // get yanked back to the section top mid-scroll (it has its own pauseSnap/resumeSnap
+    // ScrollTrigger for that, see ToBeSection.tsx). #asis has the identical pauseSnap/
+    // resumeSnap protection (see AsIsProblems.tsx) but is NOT excluded here - #insight
+    // right before it is short enough (close to one viewport) that a single strong
+    // scroll gesture could sail past its snap point with no next snap point until
+    // #persona, well past #asis's own ~2700px of content; registering #asis's own top
+    // gives that overshoot somewhere much closer to land, while its own trigger still
+    // prevents getting yanked back to its top while reading through its interior.
+    const NO_SNAP_IDS = new Set(['tobe']);
     const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id]')).filter(
       (el) => !NO_SNAP_IDS.has(el.id)
     );

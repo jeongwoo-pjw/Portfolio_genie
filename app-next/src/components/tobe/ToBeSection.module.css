@@ -596,9 +596,11 @@
 .finalBlockWrap {
   display: grid;
   grid-template-columns: 1fr minmax(240px, 400px);
-  /* start, not center: the phone box's own top should land on the same line as the
-     copy column's first line (the h3), not centered against the whole (taller) box. */
-  align-items: start;
+  /* center, not start: per a later request, the copy column should sit at the phone
+     box's own vertical center height rather than top-align with it - the row's own
+     height is set by the taller item (the 561px phone box), so centering the shorter
+     copy column against that row centers it against the phone box specifically. */
+  align-items: center;
   margin-bottom: var(--tobe-gap);
   /* column-gap wider than the site's usual var(--sp-12): SwipeAlbumCarousel's right
      neighbor album sits up to 148px past the phone box's own right edge (not clipped,

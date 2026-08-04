@@ -37,8 +37,10 @@
    "centered in the card" stays correct if the card's own size/position above changes. */
 .albumSlot {
   position: absolute;
-  /* 12px above the card template's own vertical center (55.4% -> 53.28%). */
-  top: 53.28%;
+  /* 12px above the card template's own vertical center (55.4% -> 53.28%), then a
+     further 20px up per a later request (53.28% * 561px = 299px, minus 20px =
+     279px, back to a % of .phoneBox's own 561px height = 49.73%). */
+  top: 49.73%;
   left: 50%;
   width: 0;
   height: 0;

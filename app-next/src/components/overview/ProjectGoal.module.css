@@ -92,15 +92,17 @@
   justify-content: flex-start;
   /* Both the gap and the vertical padding shrunk from --sp-6/--sp-8 - at the icon's
      old 108px size that breathing room read fine, but against the now-326px icon it
-     added up to a lot of empty space above/below, inflating the whole card. Vertical
-     padding halved again (--sp-4 -> --sp-2) per a later request specifically about the
-     icon's own top/bottom whitespace; horizontal padding untouched. */
+     added up to a lot of empty space above/below, inflating the whole card. Padding
+     halved again (top --sp-2->--sp-1, sides --sp-6->--sp-3) per a later request, now
+     that the icon itself is also smaller (234px) - bottom kept at --sp-2 rather than
+     also halved, so there's still real, deliberate breathing room under the text
+     instead of it reading flush against the card's bottom edge. */
   gap: var(--sp-3);
   background: #fff;
   border: 1px solid var(--hairline);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--sp-2) var(--sp-6);
+  padding: var(--sp-1) var(--sp-3) var(--sp-2);
   color: var(--text-dim);
   font-size: var(--fs-body);
   font-weight: 600;
@@ -117,13 +119,13 @@
   justify-content: center;
 }
 
-/* 293px = 326px (old 160px circle's 68%-filled icon x3) scaled to 90% per a later
-   size-down request. object-fit: contain keeps each illustration's own outline fully
-   visible rather than being cropped - these are irregular, non-square icon
-   illustrations, unlike the old inline SVGs. */
+/* 234px = 293px (previously scaled to 90% of the original 326px) scaled to 80% again
+   per a later size-down request. object-fit: contain keeps each illustration's own
+   outline fully visible rather than being cropped - these are irregular, non-square
+   icon illustrations, unlike the old inline SVGs. */
 .solutionIconImg {
-  width: 293px;
-  height: 293px;
+  width: 234px;
+  height: 234px;
   object-fit: contain;
 }
 
