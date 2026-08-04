@@ -47,7 +47,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     // #persona, well past #asis's own ~2700px of content; registering #asis's own top
     // gives that overshoot somewhere much closer to land, while its own trigger still
     // prevents getting yanked back to its top while reading through its interior.
-    const NO_SNAP_IDS = new Set(['tobe']);
+    // #closing also opts out: since snap resumes the instant #tobe's own trigger ends
+    // (right at the #tobe/#closing seam), #closing's own registered top could pull the
+    // view straight to it before the user has actually finished reading #tobe's last
+    // content (the Playlist block, right at that same seam).
+    const NO_SNAP_IDS = new Set(['tobe', 'closing']);
     const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id]')).filter(
       (el) => !NO_SNAP_IDS.has(el.id)
     );

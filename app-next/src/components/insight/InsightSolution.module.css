@@ -63,23 +63,22 @@
   animation: insightArrowBob 1.8s ease-in-out infinite;
 }
 
-/* Both 0/100% and 50% shifted up 3px from their original translateY(0)/translateY(5px)
-   (the whole bob raised, same 5px amplitude preserved) per a later request to move
-   both arrows up 3px. */
+/* Shifted up another 4px on top of the earlier 3px raise (0/100%: -3px -> -7px, 50%:
+   2px -> -2px) - the whole bob keeps moving up, same 5px amplitude preserved. */
 @keyframes insightArrowBob {
   0%,
   100% {
-    transform: translateY(-3px);
+    transform: translateY(-7px);
   }
   50% {
-    transform: translateY(2px);
+    transform: translateY(-2px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .stepArrow {
     animation: none;
-    transform: translateY(-3px);
+    transform: translateY(-7px);
   }
 }
 

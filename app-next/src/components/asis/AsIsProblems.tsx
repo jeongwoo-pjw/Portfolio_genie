@@ -82,7 +82,7 @@ const CASES: Case[] = [
               '일반적으로 이용권을 구매하여 앱을 사용하는 스트리밍 플랫폼의 특성상, 이미 이용권을 구독중인 다수의 사용자들에게 이용권 아이콘은 불필요한 UI',
           },
         ],
-        image: { src: '/images/asis-main-1-point1.png', alt: 'GNB 영역 — 지니 로고, 이용권, 프로필 아이콘', scale: 0.72 },
+        image: { src: '/images/asis-main-1-point1.png', alt: 'GNB 영역 — 지니 로고, 이용권, 프로필 아이콘', scale: 0.504 },
       },
       {
         tag: 'POINT 2',
@@ -94,7 +94,7 @@ const CASES: Case[] = [
           },
           '키워드별 음악이 나열되어 있음을 직관적으로 알기 힘든 "홈" 메뉴 이름',
         ],
-        image: { src: '/images/asis-main-1-point2.png', alt: '하단 탭바 — 홈, 오디오, 검색, 내음악, 전체메뉴', scale: 0.72 },
+        image: { src: '/images/asis-main-1-point2.png', alt: '하단 탭바 — 홈, 오디오, 검색, 내음악, 전체메뉴', scale: 0.504 },
       },
     ],
   },
